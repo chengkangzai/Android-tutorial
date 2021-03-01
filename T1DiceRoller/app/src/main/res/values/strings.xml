@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">T1-DiceRoller</string>
+    <string name="roll">ROLL</string>
+    <string name="todo">TODO</string>
 </resources>
