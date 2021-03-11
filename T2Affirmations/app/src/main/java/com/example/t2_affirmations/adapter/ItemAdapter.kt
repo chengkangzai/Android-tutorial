@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.t2_affirmations.R
@@ -14,8 +15,9 @@ class ItemAdapter(
     private val dataSet: List<Affirmation>
 ) : RecyclerView.Adapter<ItemAdapter.ItemViewHolder>() {
 
-    class ItemViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(R.id.item_title);
+    class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val textView: TextView = view.findViewById(R.id.item_title)
+        val imageView: ImageView = view.findViewById(R.id.item_image)
     }
 
     /**
@@ -32,9 +34,16 @@ class ItemAdapter(
         return ItemViewHolder(adapterLayout);
     }
 
+    /**
+     * This will get call again and again while user scrolling the screen
+     *
+     * @param holder View holder that hold the content
+     * @param position position that currently looking
+     */
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = dataSet[position];
         holder.textView.text = context.resources.getString(item.stringResourceId)
+        holder.imageView.setImageResource(item.imageResourceId)
     }
 
     override fun getItemCount(): Int {
