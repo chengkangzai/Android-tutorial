@@ -18,6 +18,7 @@ class BlankFragment : Fragment() {
 //        return inflater.inflate(R.layout.fragment_blank, container, false)
 
         /**
+         * instead of returning the fragment itself, we will return the Data Binding of this fragment
          * FragmentBlankBinding is auto generate
          */
         val binding = DataBindingUtil.inflate<FragmentBlankBinding>(
