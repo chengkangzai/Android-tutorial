@@ -22,18 +22,19 @@ class SplashActivity : AppCompatActivity() {
 
 
         /**
-         * Force the software to sleep!
+         * Force the software to sleep! Equivalent to
          */
         Handler(Looper.getMainLooper()).postDelayed(
             {
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java));
+                startActivity(Intent(this@SplashActivity, LoginActivity::class.java));
                 finish()
             },
             3000
         )
 
         /**
-         * Not the cleanest solution !
+         * Not the cleanest solution to change typeface!
+         * Replace by utils.
          */
 //        val typeface: Typeface = Typeface.createFromAsset(assets, "Montserrat-Bold.ttf")
 //        findViewById<TextView>(R.id.tv_app_name).typeface = typeface;
