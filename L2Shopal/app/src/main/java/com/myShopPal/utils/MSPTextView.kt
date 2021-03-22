@@ -1,4 +1,4 @@
-package utils
+package com.myShopPal.utils
 
 import android.content.Context
 import android.graphics.Typeface

@@ -1,4 +1,4 @@
-package com.myShopPal
+package com.myShopPal.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,7 +6,9 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.myShopPal.R
 
+@Suppress("DEPRECATION")
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
