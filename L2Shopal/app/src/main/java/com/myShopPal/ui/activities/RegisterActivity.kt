@@ -3,6 +3,8 @@ package com.myShopPal.ui.activities
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.WindowManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.myShopPal.R
 import kotlinx.android.synthetic.main.activity_register.*
 
@@ -17,10 +19,10 @@ class RegisterActivity : BaseActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
 
-        this.setupActionBar();
+        this.setupActionBar()
 
         btn_register.setOnClickListener {
-            this.validateRegisterDetails()
+            this.registerUser()
         }
     }
 
@@ -79,9 +81,42 @@ class RegisterActivity : BaseActivity() {
                 false
             }
             else -> {
-                showErrorSnackBar(getString(R.string.msg_valid_detail), false)
                 true
             }
+        }
+    }
+
+    /**
+     * A function to register the user with email and password using FirebaseAuth.
+     */
+    private fun registerUser() {
+
+        // Check with validate function if the entries are valid or not.
+        if (validateRegisterDetails()) {
+
+            val email: String = et_email.text.toString().trim { it <= ' ' }
+            val password: String = et_email.text.toString().trim { it <= ' ' }
+
+            // Create an instance and create a register a user with email and password.
+            FirebaseAuth.getInstance()
+                .createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+
+                    // If the registration is successfully done
+                    if (task.isSuccessful) {
+
+                        // Firebase registered user
+                        val firebaseUser: FirebaseUser = task.result!!.user!!
+
+                        showErrorSnackBar(
+                            "You are registered successfully. Your user id is ${firebaseUser.uid}",
+                            false
+                        )
+                    } else {
+                        // If the registering is not successful then show error message.
+                        showErrorSnackBar(task.exception!!.message.toString(), true)
+                    }
+                }
         }
     }
 }
