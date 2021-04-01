@@ -3,6 +3,7 @@ package com.myShopPal.ui.activities
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.WindowManager
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.myShopPal.R
@@ -129,5 +130,30 @@ class RegisterActivity : BaseActivity() {
                     }
                 }
         }
+    }
+
+    /**
+     * A function to notify the success result of Firestore entry when the user is registered successfully.
+     */
+    fun userRegistrationSuccess() {
+
+        // Hide the progress dialog
+        hideProgressDialog()
+
+        // TODO Step 5: Replace the success message to the Toast instead of Snackbar.
+        Toast.makeText(
+            this@RegisterActivity,
+            resources.getString(R.string.register_success),
+            Toast.LENGTH_SHORT
+        ).show()
+
+
+        /**
+         * Here the new user registered is automatically signed-in so we just sign-out the user from firebase
+         * and send him to Intro Screen for Sign-In
+         */
+        FirebaseAuth.getInstance().signOut()
+        // Finish the Register Screen
+        finish()
     }
 }
