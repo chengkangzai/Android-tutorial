@@ -7,6 +7,8 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.myShopPal.R
+import com.myShopPal.firestore.FireStoreClass
+import com.myShopPal.model.User
 import kotlinx.android.synthetic.main.activity_register.*
 
 @Suppress("DEPRECATION")
@@ -92,7 +94,6 @@ class RegisterActivity : BaseActivity() {
      */
     private fun registerUser() {
 
-        // Check with validate function if the entries are valid or not.
         if (validateRegisterDetails()) {
 
             showProgressDialog(resources.getString(R.string.please_wait))
@@ -100,32 +101,24 @@ class RegisterActivity : BaseActivity() {
             val email: String = et_email.text.toString().trim { it <= ' ' }
             val password: String = et_email.text.toString().trim { it <= ' ' }
 
-            // Create an instance and create a register a user with email and password.
             FirebaseAuth.getInstance()
                 .createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-
                     hideProgressDialog()
 
-                    // If the registration is successfully done
                     if (task.isSuccessful) {
 
-                        // Firebase registered user
                         val firebaseUser: FirebaseUser = task.result!!.user!!
 
-                        showErrorSnackBar(
-                            "You are registered successfully. Your user id is ${firebaseUser.uid}",
-                            false
+                        val user = User(
+                            firebaseUser.uid,
+                            et_first_name.text.toString().trim { it <= ' ' },
+                            et_last_name.text.toString().trim { it <= ' ' },
+                            et_email.text.toString().trim { it <= ' ' }
                         )
 
-                        /**
-                         * user registered is automatically signed-in so we just sign-out the user from firebase
-                         */
-                        FirebaseAuth.getInstance().signOut()
-                        // Finish the Register Screen
-                        finish()
+                        FireStoreClass().registerUser(this@RegisterActivity, user)
                     } else {
-                        // If the registering is not successful then show error message.
                         showErrorSnackBar(task.exception!!.message.toString(), true)
                     }
                 }
@@ -136,11 +129,6 @@ class RegisterActivity : BaseActivity() {
      * A function to notify the success result of Firestore entry when the user is registered successfully.
      */
     fun userRegistrationSuccess() {
-
-        // Hide the progress dialog
-        hideProgressDialog()
-
-        // TODO Step 5: Replace the success message to the Toast instead of Snackbar.
         Toast.makeText(
             this@RegisterActivity,
             resources.getString(R.string.register_success),
@@ -153,7 +141,6 @@ class RegisterActivity : BaseActivity() {
          * and send him to Intro Screen for Sign-In
          */
         FirebaseAuth.getInstance().signOut()
-        // Finish the Register Screen
         finish()
     }
 }
