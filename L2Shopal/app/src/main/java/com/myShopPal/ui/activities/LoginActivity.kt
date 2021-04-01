@@ -118,6 +118,11 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
         // Redirect the user to Main Screen after log in.
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        if (user.profileCompleted == 0) {
+            startActivity(Intent(this@LoginActivity, UserProfileActivity::class.java))
+        } else {
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+        }
         finish()
     }
 }
