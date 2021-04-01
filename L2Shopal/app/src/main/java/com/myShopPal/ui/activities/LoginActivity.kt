@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.view.WindowManager
+import com.google.firebase.auth.FirebaseAuth
 import com.myShopPal.R
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -28,6 +29,9 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
         tv_forgot_password.setOnClickListener(this)
     }
 
+    /**
+     * A function to validate the login entries of a user.
+     */
     private fun validateLoginDetails(): Boolean {
         return when {
             TextUtils.isEmpty(et_email.text.toString().trim { it <= ' ' }) -> {
@@ -39,7 +43,6 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 false
             }
             else -> {
-                showErrorSnackBar("Your details are valid.", false)
                 true
             }
         }
@@ -55,7 +58,7 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                 }
 
                 R.id.btn_login -> {
-                    this.validateLoginDetails()
+                    this.logInRegisteredUser()
                 }
 
                 R.id.tv_register -> {
@@ -63,6 +66,38 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
                     startActivity(intent)
                 }
             }
+        }
+    }
+
+
+    /**
+     * A function to Log-In. The user will be able to log in using the registered email and password with Firebase Authentication.
+     */
+    private fun logInRegisteredUser() {
+
+        if (validateLoginDetails()) {
+
+            // Show the progress dialog.
+            showProgressDialog(resources.getString(R.string.please_wait))
+
+            // Get the text from editText and trim the space
+            val email = et_email.text.toString().trim { it <= ' ' }
+            val password = et_password.text.toString().trim { it <= ' ' }
+
+            // Log-In using FirebaseAuth
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+
+                    // Hide the progress dialog
+                    hideProgressDialog()
+
+                    if (task.isSuccessful) {
+
+                        showErrorSnackBar("You are logged in successfully.", false)
+                    } else {
+                        showErrorSnackBar(task.exception!!.message.toString(), true)
+                    }
+                }
         }
     }
 }
